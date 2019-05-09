@@ -7,7 +7,8 @@ from flask_restful import Api, Resource, reqparse
 app = Flask(__name__)
 api = Api(app)
 
-commit_sha = 123
+f= open("commithash","r")
+commit_sha = f.read().replace('\n','')
 
 js = {
  "version": "1.0",
