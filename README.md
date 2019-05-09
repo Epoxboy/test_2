@@ -1,6 +1,6 @@
 # Interview Test 2: Building Microservices API with Python + Flask and Docker
 
-Introduction
+# Introduction
 
 This small API demo application is written in Python 2.7 with Flask Microframework, it includes only one endpoint  "/healthcheck" , and gives a JSON format response when hit. It'll return:
 
@@ -15,7 +15,7 @@ The Build and Deployment are managed by Travis CI, every commit will trigger a p
     2) Push_image:
        It'll push new image to Docker hub, my personal repo, with image name epoxboy/interview-test2:$SHORT_HASH
 
-Usage
+# Usage
 
    To run the app, you need to get Docker installed on your computer, then use following command to pull the image down and run:
 
@@ -31,7 +31,7 @@ Usage
    
 
 
-Moving further
+# Moving further
 
 The API test is missing in the pipeline, which can be done with Postman newman integration with Travis CI. Steps:
 
