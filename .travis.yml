@@ -1,3 +1,27 @@
 language: python
+
 services:
   - docker
+
+env:
+  global:
+  - secure: i9umQNBOgjshoAFu7Tyg6LrfflDMjBcjQ8Fww29KMzwaEonugWyhlox0WY7OHbNRQcVsAY4Qr2+tvCq94b0n6HkrrbbRKzK+Q28iFQJnUVUdseQmP2AXuMKJ9uaGHiRnsV1raJp9N9TgAdJNWAr5qkB2ovP0cWS23+cf2WJdoNRHwM0Y+2VMSonVzxquT0DgTjS8uqbO4IKihOFhj1t1R2vfR+IFwFV2KERTsnyBnKAU5GUHGVTg6ZwACdbHhtBk2kjxMYYIp0OZpCWqBPzYIrY2/Brh0cepD0mIr2wjrROkzi50eRFK1hJpr42DrlTEGEWjAf7X/cLfJpgDQfQjJIMcMy9fzBVuUcJZlm/0nPtmIg3N9Ovl376wWJS5IaetqVYvAyFjQLSD3SNx99yGKESFaT62nrEg6vD7lLhXd0Q0LR2e0i2bgoqKiFruAzmmN+DQee2TyAbg3sUea6f1hFsDvwVMl/BhSgGwGZMvmfsM2lrrPpoXFPXXh6zasGJX78n8Ha0Rn0sGbT15dTvEu1DJLvlwm8hPdyatAFYi2/6kF9A9hu2EPSXNujO7HmyU2/6HTvnG1vEyHl24Y17jChCM6a1Kc77+KLYCgT8LhOmgfM+0Fa3cccRijrKjEg3nkAfWz1FUoFlmCq9DTqpe9CaDdRHbSjTWvBa0W9vd/hc=
+  - secure: koLev9m1tINxEcVcZxmpf4J40mYvEy8upq+MvKPAoSarHRAQXKOyOj5i677JQhcGxni1NfYxLAr2nzGHWfJAn29V784/38dywD6JhCl1iseVwdzDbcGh36XV1cCmZjHC7JYcXbVBqoNooYUIOvre9kQzXjnMGztj65KIQ5nv9K9z/rE2NHF+DOHVKdR2B15biQpnqrKiaBtYnwtnbz4qSzZ/6iLhzqNtcxTn4+GqAfrpKkX0i0lu2nK6Y/XSWgE8CUSrs/kP5OP553Mx4wL/c+hYhn+pY50D51wU87CyOE0rFFiiymDQeMJoskg/I7k6bvUFOeXHIKKvXY4bd8evVhUUZk7LJtnookhaCKkSypi5LCb1FloRjeJn+juQkTVtY46seS1kd7GYKG0v8KdPZzFLx5Wj7uWO9ckoEVY+FR8th4Qn2zoSNNswrzCNaJ1N68mq21YJsDctrw/oAV56f85gOvaSISxm0KrSaiF9WUSCBe/YDMO9sNMdasQIdgulLKFi9eZzMwBol+qLGzgP2zkgelcRzPFk1cGqHhlXaZxCZrg9uu9yIWNNSwicbjSdv5iRAubsyd66wHiQyfW8/LtMxaJQkg4HnuXviRrASMbqAFC9HKzMNDOCh0pyJtWd+lrUAxsQsPNhEtR8TaRcEwBva/BK02VcfD9PEaSwahw=
+
+stages:
+  - Build_image
+  - name: Push_image
+    if: branch = master
+
+jobs:
+  include:
+    - stage: Build_image
+      script: 
+        - export SHORT_HASH=$(echo $TRAVIS_COMMIT | head -c 7)
+        - docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT -t epoxboy/interview-test2:$SHORT_HASH .
+    - stage: Push_image
+      script: 
+        - export SHORT_HASH=$(echo $TRAVIS_COMMIT | head -c 7)
+        - docker build --build-arg COMMIT_HASH=$TRAVIS_COMMIT -t epoxboy/interview-test2:$SHORT_HASH .
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker push epoxboy/interview-test2:$SHORT_HASH
